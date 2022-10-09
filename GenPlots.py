@@ -41,37 +41,10 @@ for x in class_names:
 
 def visualize(param):
     # reading the audio file
-    raw = wave.open(param)
-    # reads all the frames
-    # -1 indicates all or max frames
-    signal = raw.readframes(-1)
-    signal = np.frombuffer(signal, dtype ="int16")
-    # gets the frame rate
-    f_rate = raw.getframerate()
-    # to Plot the x-axis in seconds
-    # you need get the frame rate
-    # and divide by size of your signal
-    # to create a Time Vector
-    # spaced linearly with the size
-    # of the audio file
-    time = np.linspace(
-        0, # start
-        len(signal) / f_rate,
-        num = len(signal)
-    )
-    # using matplotlib to plot
-    # creates a new figure
-    plt.figure(1)
-    # title of the plot
+    y,sr=librosa.load(param) #load the file
     plt.title(param)
-    # label of x-axis
-    plt.xlabel("Time")
-    # actual plotting
-    plt.plot(time, signal)
-    # shows the plot
-    # in new window
+    librosa.display.waveshow(y,sr=sr, x_axis='time', color='cyan')
     plt.show()
- 
     # can save with plt.savefig('filename')
     
 def visualize_spec(param):
@@ -103,7 +76,7 @@ def gen_mel_spec(param):
 def main():
     for sound in random_sounds:
          visualize(sound)  
-         visualize_spec(sound)
-         gen_mel_spec(sound)  
+         #visualize_spec(sound)
+         #gen_mel_spec(sound)  
 
 if __name__ == '__main__': main()
