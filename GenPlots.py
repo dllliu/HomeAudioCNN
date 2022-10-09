@@ -9,6 +9,7 @@ import numpy as np
 import librosa.display
 
 SOURCE_DATA='Folded-AudioData'
+MODEL_GRAPHS= 'GeneratedGraphs' 
 GENERATED_DATA='GeneratedData'
 
 file_ext = '*.wav'
@@ -44,8 +45,8 @@ def visualize(param):
     y,sr=librosa.load(param) #load the file
     plt.title(param)
     librosa.display.waveshow(y,sr=sr, x_axis='time', color='cyan')
-    plt.show()
-    # can save with plt.savefig('filename')
+    plt.savefig(os.path.join(MODEL_GRAPHS,'Waveplot' + str(param.split("\\")[2])+ ".png"))
+    #plt.show()
     
 def visualize_spec(param):
     y,sr = librosa.load(param)
@@ -55,7 +56,8 @@ def visualize_spec(param):
     img = librosa.display.specshow(S,x_axis='time',y_axis='log',ax=ax)
     ax.set_title("Spectogram: " + param,fontsize=10)
     fig.colorbar(img,ax=ax)
-    plt.show()
+    plt.savefig(os.path.join(MODEL_GRAPHS,'Spectrogram' + str(param.split("\\")[2])+ ".png"))
+    #plt.show()
     
 def gen_mel_spec(param):
     y,sr = librosa.load(param)
@@ -71,12 +73,13 @@ def gen_mel_spec(param):
                           ax=ax)
     ax.set_title('Mel Spectogram:' + param, fontsize=8)
     fig.colorbar(img, ax=ax, format=f'%0.2f')
-    plt.show()
+    plt.savefig(os.path.join(MODEL_GRAPHS,'Log_Mel_Spectrogram' + str(param.split("\\")[2])+ ".png"))
+    #plt.show()
 
 def main():
     for sound in random_sounds:
          visualize(sound)  
-         #visualize_spec(sound)
-         #gen_mel_spec(sound)  
+         visualize_spec(sound)
+         gen_mel_spec(sound)  
 
 if __name__ == '__main__': main()

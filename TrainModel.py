@@ -1,4 +1,3 @@
-import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 import os
@@ -10,10 +9,8 @@ from keras.optimizers import SGD
 from keras.models import Sequential
 from matplotlib import pyplot as plt
 from sklearn.metrics import confusion_matrix
-import seaborn as sns
-from numpy import reshape
 from sklearn.metrics import classification_report
-
+import seaborn as sns
 
 MODEL_GRAPHS= 'GeneratedGraphs' 
 # Define network architecture #
