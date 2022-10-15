@@ -10,7 +10,6 @@ GENERATED_DATA='GeneratedData/'
 
 file_ext = '*.wav'
 
-sub_dir = os.listdir(SOURCE_DATA)
 child_dirs = os.listdir(SOURCE_DATA)
 
 itr = iter(child_dirs)
@@ -54,7 +53,7 @@ def parse_audio_files(parent_dir,sub_dir,file_ext='*.wav'):
 sub_dirs = np.array(['fold1','fold2','fold3','fold4','fold5','fold6','fold7','fold8','fold9','fold10'])
                   
 def saveFeatures():
-    for sub_dir in sub_dirs:
+    for sub_dir in child_dirs:
         features, labels = parse_audio_files(SOURCE_DATA,sub_dir)
         np.savez("{0}{1}".format(GENERATED_DATA, sub_dir), features=features,labels=labels)
     #numpy's savez(~) method writes multiple Numpy arrays to a single file in .npz format. 

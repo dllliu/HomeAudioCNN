@@ -3,7 +3,7 @@ import numpy as np
 import os
 from sklearn.model_selection import KFold
 from keras.layers import Dense, Dropout, Activation
-from keras.layers import Embedding
+from keras.layers import Embedding, Flatten
 from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPooling1D
 from keras.optimizers import SGD
 from keras.models import Sequential
@@ -12,14 +12,15 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 import seaborn as sns
 
-MODEL_GRAPHS= 'GeneratedGraphs' 
+MODEL_GRAPHS= 'GeneratedGraphs'  #Directory model info should be saved in
 # Define network architecture #
 def get_network():
     input_shape = (193,)
     num_classes = 10
     keras.backend.clear_session()
+    
     model = Sequential()
-    model.add(Conv1D(64, 3, activation='relu', input_shape=(193, 1)))
+    model.add(Conv1D(64, 3, activation='relu', input_shape=(193, )))
     model.add(Conv1D(64, 3, activation='relu'))
     model.add(MaxPooling1D(3))
     model.add(Conv1D(128, 3, activation='relu'))
@@ -30,21 +31,7 @@ def get_network():
     model.compile(loss='sparse_categorical_crossentropy', 
         optimizer='rmsprop', 
         metrics=['accuracy'])
-        
-    """
-    model = keras.models.Sequential()
-    model.add(keras.layers.Dense(256, activation="relu", input_shape=input_shape))
-    model.add(Dropout(0.5))
-    model.add(keras.layers.Dense(128, activation="relu", input_shape=input_shape))
-    model.add(Dropout(0.5))
-    model.add(keras.layers.Dense(64, activation="relu", input_shape=input_shape))
-    model.add(keras.layers.Dense(num_classes, activation = "softmax"))
-    
-    model.compile(optimizer='rmsprop',
-        loss=keras.losses.SparseCategoricalCrossentropy(),
-        metrics=["accuracy"])
-    model.summary()
-    """
+       
     return model
 
 
@@ -73,7 +60,7 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
 
     model = get_network()
     
-    history = model.fit(x_train, y_train,validation_split=0.2, epochs = 70, batch_size = 24, verbose = 0) #epochs = 70
+    history = model.fit(x_train, y_train,validation_split=0.2, epochs = 70, batch_size = 24, verbose = 0) 
         
     # summarize history for accuracy
     plt.plot(history.history['accuracy'])
