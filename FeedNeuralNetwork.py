@@ -34,8 +34,7 @@ def get_network():
        
     return model
 
-
-#Train and evaluate via 10-Folds cross-validation 
+#Train and evaluate via 10-Fold cross-validation 
 accuracies = []
 losses = []
 folds = np.array(['fold1','fold2','fold3','fold4','fold5','fold6','fold7','fold8','fold9','fold10'])
@@ -60,7 +59,7 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
 
     model = get_network()
     
-    history = model.fit(x_train, y_train,validation_split=0.2, epochs = 70, batch_size = 24, verbose = 0) 
+    history = model.fit(x_train, y_train,validation_split=0.2, epochs = 70, batch_size = 24, verbose = 1) 
         
     # summarize history for accuracy
     plt.plot(history.history['accuracy'])
