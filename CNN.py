@@ -252,7 +252,7 @@ def get_network():
     model.add(Dense(1024, activation='relu')) 
     model.add(Dense(10, activation='softmax')) 
     
-    model.compile(loss = "categorical_crossentropy", optimizer = SAdam(lr=1e-5), metrics=['accuracy'])
+    model.compile(loss = "categorical_crossentropy", optimizer = Adam(lr=1e-5), metrics=['accuracy'])
     return model
 
 model = get_network()
