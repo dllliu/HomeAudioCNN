@@ -28,6 +28,14 @@ fold10 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
 
 class_names = [fold1,fold2,fold3,fold4,fold5,fold6,fold7,fold8,fold9,fold10]
 
+def make_file_structure():
+    arr = ['fold1','fold2','fold3','fold4','fold5','fold6','fold7','fold8','fold9','fold10']
+    for fold in arr:
+        OutFolder = os.path.join(GENERATED_DATA,fold)
+        if not os.path.exists(OutFolder):
+            os.makedirs(OutFolder)
+    
+    
 def create_specs(audio_file, image_file):
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
