@@ -194,6 +194,7 @@ from sklearn.model_selection import train_test_split
 x_train_norm = np.array(x_train) / 255
 x_test_norm = np.array(x_test) / 255
 
+#one hot encode
 y_train_encoded = to_categorical(y_train)
 y_test_encoded = to_categorical(y_test)
 
@@ -210,39 +211,42 @@ from tensorflow.keras.layers import BatchNormalization
 import seaborn as sns
 
 base_model = MobileNet(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
-"""
+
+
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 x = Dense(1024, activation='relu')(x)
 predictions = Dense(10, activation='softmax')(x)
 
 model = Model(inputs=base_model.input, outputs=predictions)
-for layer in base_model.layers: #freeze all layers
+
+#train_features = base_model.predict(x_train_norm)
+#test_features = base_model.predict(x_test_norm)
+
+for layer in model.layers: #freeze all layers
     layer.trainable = False
 
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy',metrics=['accuracy'])
 
-model.fit(x_train_norm,y_train_encoded,validation_data=(x_test_norm, y_test_encoded),batch_size=10,epochs=5)
+model.fit(x_train_norm,y_train_encoded,validation_data=(x_test_norm, y_test_encoded),batch_size=15,epochs=10)
 
-for i, layer in enumerate(base_model.layers):
+for i, layer in enumerate(model.layers):
    print(i, layer.name)
 
-for layer in model.layers[:61]:
+
+for layer in model.layers[:67]: #54
    layer.trainable = False
-for layer in model.layers[61:]:
+for layer in model.layers[67:]:
    layer.trainable = True
 
 # we need to recompile the model for these modifications to take effect
-# we use SGD with a low learning rate
 model.compile(optimizer=Adam(lr=1e-5), loss='categorical_crossentropy',metrics=['accuracy'])
 model.summary()
-history = model.fit(x_train_norm,y_train_encoded,validation_data=(x_test_norm, y_test_encoded),batch_size=10,epochs=70)
+history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=10,epochs=50)
+
+#increase epochs and maybe increase layer cutoff
+######################
 """
-
-
-train_features = base_model.predict(x_train_norm)
-test_features = base_model.predict(x_test_norm)
-
 def get_network():
     input_shape = (224, 224, 3)
     num_classes = 10
@@ -252,7 +256,7 @@ def get_network():
     model.add(Dense(1024, activation='relu')) 
     model.add(Dense(10, activation='softmax')) 
     
-    model.compile(loss = "categorical_crossentropy", optimizer = Adam(lr=1e-5), metrics=['accuracy'])
+    model.compile(loss = "categorical_crossentropy", optimizer = Adam(lr=0.0001), metrics=['accuracy'])
     return model
 
 model = get_network()
@@ -260,6 +264,8 @@ model = get_network()
 model.summary()
 
 history = model.fit(train_features, y_train_encoded, validation_data=(test_features, y_test_encoded), batch_size=10, epochs=50)
+"""
+###################
 
 model.save('TrainedModel.h5')
 
@@ -283,9 +289,9 @@ plt.show()
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 
-#y_predicted = model.predict(x_test_norm)
-#con_mat_df = confusion_matrix(y_test_encoded.argmax(axis=1), y_predicted.argmax(axis=1))
-y_predicted = model.predict(test_features)
+y_predicted = model.predict(x_test_norm)
+
+#y_predicted = model.predict(test_features)
 con_mat_df = confusion_matrix(y_test_encoded.argmax(axis=1), y_predicted.argmax(axis=1))
 figure = plt.figure(figsize=(8, 8))
 sns.heatmap(con_mat_df,annot=True,cmap=plt.cm.Blues)
@@ -298,5 +304,6 @@ plt.savefig("Confusion_Matrix_CNN")
 print("Displaying Classification Report")
 classes = ["0-Voices","1-Locomotion","2-Digestive","3-Hygiene","4-Animals","5-Cook_App","6-Clean-App","7-Vent_App","8-Furniture","9-Instruments"]
 print(classification_report(y_test_encoded.argmax(axis=1), y_predicted.argmax(axis=1), target_names=classes))
+
 
 
