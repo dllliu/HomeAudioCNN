@@ -10,7 +10,6 @@ import librosa.display
 
 SOURCE_DATA='Folded-AudioData'
 MODEL_GRAPHS= 'GeneratedGraphs' 
-GENERATED_DATA='GeneratedData'
 
 file_ext = '*.wav'
 
@@ -18,6 +17,7 @@ sub_dir = os.listdir(SOURCE_DATA)
 child_dirs = os.listdir(SOURCE_DATA)
 
 itr = iter(child_dirs)
+fold0 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
 fold1 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
 fold2 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
 fold3 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
@@ -27,9 +27,8 @@ fold6 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
 fold7 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
 fold8 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
 fold9 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold10 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
 
-class_names = [fold1,fold2,fold3,fold4,fold5,fold6,fold7,fold8,fold9,fold10]
+class_names = [fold0,fold1,fold2,fold3,fold4,fold5,fold6,fold7,fold8,fold9]
 
 random_sounds = []
 for x in class_names:
