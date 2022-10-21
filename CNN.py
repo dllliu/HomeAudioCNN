@@ -33,7 +33,7 @@ def make_file_structure():
         OutFolder = os.path.join(GENERATED_DATA,fold)
         if not os.path.exists(OutFolder):
             os.makedirs(OutFolder)
-    
+
 def create_specs(audio_file, image_file):
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
@@ -41,11 +41,11 @@ def create_specs(audio_file, image_file):
     y, sr = librosa.load(audio_file)
     ms = librosa.feature.melspectrogram(y, sr=sr)
     log_ms = librosa.power_to_db(ms, ref=np.max)
-    librosa.display.specshow(log_ms, sr=sr)    
+    librosa.display.specshow(log_ms, sr=sr)
     #plt.show()
     fig.savefig(image_file)
     plt.close(fig)
-  
+
 def save_specs(input_path, output_path):
     for fn in glob(os.path.join(input_path,file_ext)):
         start = fn.find("\\") + 1
@@ -53,7 +53,7 @@ def save_specs(input_path, output_path):
         input_file = os.path.join(input_path, name)
         output_file = os.path.join(output_path, name.replace('.wav', '.png'))
         create_specs(input_file, output_file)
-            
+
 #child_dirs = os.listdir(SOURCE_DATA)
 import keras
 import tensorflow as tf
@@ -64,7 +64,7 @@ def load_images(file):
     array = tf.keras.preprocessing.image.img_to_array(image)
     images.append(array)
     return images
-    
+
 '''
 make_file_structure()
 specs_dir = os.listdir(SOURCE_DATA)
@@ -106,7 +106,7 @@ def base_model():
 
     model = Model(inputs=base_model.input, outputs=predictions)
     for layer in model.layers: #freeze all layers
-        layer.trainable = False    
+        layer.trainable = False
     return model
 
 x_train = []
@@ -123,7 +123,7 @@ load_dir = "Spectrograms/"
 accuracies = []
 losses = []
 kf = KFold(n_splits=10)
-for train_index, test_index in kf.split(folds): #Splits into training and testing sets 
+for train_index, test_index in kf.split(folds): #Splits into training and testing sets
     x_train, y_train = [], []
     for ind in train_index:
         param = os.path.join(load_dir,'fold'+str(ind),"*png")
@@ -146,25 +146,25 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
 
     model.compile(optimizer='rmsprop', loss='categorical_crossentropy',metrics=['accuracy'])
 
-    model.fit(x_train_norm,y_train_encoded,validation_data=(x_test_norm, y_test_encoded),batch_size=15,epochs=10) #e=10
-    
+    model.fit(x_train_norm,y_train_encoded,validation_data=(x_test_norm, y_test_encoded),batch_size=10,epochs=5) #e=10
+
     #determine which layer to slice at for freeze/unfreeze
     '''
     for i, layer in enumerate(model.layers):
        print(i, layer.name)
     '''
-    
+
     for layer in model.layers[:67]:
        layer.trainable = False
-       
+
     for layer in model.layers[67:]:
        layer.trainable = True
 
     # we need to recompile the model for these modifications to take effect
     model.compile(optimizer=Adam(lr=1e-5), loss='categorical_crossentropy',metrics=['accuracy'])
     #model.summary()
-    history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=10,epochs=20) #e=10
-    
+    history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=15,epochs=50) #e=10
+
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
     plt.title('model accuracy')
@@ -172,7 +172,7 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
-    
+
     # summarize history for loss
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
@@ -181,7 +181,7 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
-    
+
     #count = 0
     #model.save("Model" + str(count) + ".h5")
     #count += 1
@@ -192,22 +192,22 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     print(accuracies)
     print(losses)
 
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import classification_report
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import classification_report
 
-y_predicted = model.predict(x_test_norm)
-con_mat_df = confusion_matrix(y_test_encoded.argmax(axis=1), y_predicted.argmax(axis=1))
-figure = plt.figure(figsize=(8, 8))
-sns.heatmap(con_mat_df,annot=True,cmap=plt.cm.Blues)
-plt.tight_layout()
-plt.ylabel('True label')
-plt.xlabel('Predicted label')
-plt.show()
-#plt.savefig("Confusion_Matrix_CNN")
+    y_predicted = model.predict(x_test_norm)
+    con_mat_df = confusion_matrix(y_test_encoded.argmax(axis=1), y_predicted.argmax(axis=1))
+    figure = plt.figure(figsize=(8, 8))
+    sns.heatmap(con_mat_df,annot=True,cmap=plt.cm.Blues)
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.show()
+    #plt.savefig("Confusion_Matrix_CNN")
 
-print("Displaying Classification Report")
-classes = ["0-Voices","1-Locomotion","2-Digestive","3-Elements","4-Animals","5-Cook_App","6-Clean-App","7-Vent_App","8-Furniture","9-Instruments"]
-print(classification_report(y_test_encoded.argmax(axis=1), y_predicted.argmax(axis=1), target_names=classes))
+    print("Displaying Classification Report")
+    classes = ["0-Voices","1-Locomotion","2-Digestive","3-Elements","4-Animals","5-Cook_App","6-Clean-App","7-Vent_App","8-Furniture","9-Instruments"]
+    print(classification_report(y_test_encoded.argmax(axis=1), y_predicted.argmax(axis=1), target_names=classes))
 
 print("Average 10 Folds Accuracy:" + str((np.mean(accuracies))))
 fig = plt.figure(figsize = (10, 5))
@@ -215,11 +215,9 @@ fig = plt.figure(figsize = (10, 5))
 # creating the bar plot
 plt.bar(all_folds, accuracies, color ='maroon',
         width = 0.4)
- 
+
 plt.xlabel("Fold No")
 plt.ylabel("Accuracy")
 plt.title("Accuracy of Each Fold")
 plt.show()
 #plt.savefig(os.path.join(MODEL_GRAPHS,"Dataset_All_Folds_Accuracy" + ".png"))
-
-
