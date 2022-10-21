@@ -163,7 +163,7 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     # we need to recompile the model for these modifications to take effect
     model.compile(optimizer=Adam(lr=1e-5), loss='categorical_crossentropy',metrics=['accuracy'])
     #model.summary()
-    history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=10,epochs=10) #e=10
+    history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=10,epochs=20) #e=10
     
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
@@ -182,13 +182,15 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
     
-    count = 0
+    #count = 0
     #model.save("Model" + str(count) + ".h5")
-    count += 1
+    #count += 1
 
     l, a = model.evaluate(x_test_norm,y_test_encoded,verbose = 0)
     accuracies.append(a)
     losses.append(l)
+    print(accuracies)
+    print(losses)
 
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
@@ -217,6 +219,7 @@ plt.bar(all_folds, accuracies, color ='maroon',
 plt.xlabel("Fold No")
 plt.ylabel("Accuracy")
 plt.title("Accuracy of Each Fold")
-plt.savefig(os.path.join(MODEL_GRAPHS,"Dataset_All_Folds_Accuracy" + ".png"))
+plt.show()
+#plt.savefig(os.path.join(MODEL_GRAPHS,"Dataset_All_Folds_Accuracy" + ".png"))
 
 
