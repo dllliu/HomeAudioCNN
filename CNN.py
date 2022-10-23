@@ -35,16 +35,18 @@ def make_file_structure():
             os.makedirs(OutFolder)
 
 def create_specs(audio_file, image_file):
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-    fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
+    hop_length = 512
+    n_fft = 2048
+    n_mels = 128
     y, sr = librosa.load(audio_file)
-    ms = librosa.feature.melspectrogram(y, sr=sr)
-    log_ms = librosa.power_to_db(ms, ref=np.max)
-    librosa.display.specshow(log_ms, sr=sr)
+    S = librosa.feature.melspectrogram(y, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
+    S_DB = librosa.power_to_db(S, ref=np.max)
+    librosa.display.specshow(S_DB, sr=sr, hop_length=hop_length)
+    #plt.colorbar(format='%+2.0f dB')
+    plt.axis('off')
     #plt.show()
-    fig.savefig(image_file)
-    plt.close(fig)
+    plt.savefig(image_file,bbox_inches='tight', pad_inches=0)
+    plt.close()
 
 def save_specs(input_path, output_path):
     for fn in glob(os.path.join(input_path,file_ext)):
@@ -54,7 +56,6 @@ def save_specs(input_path, output_path):
         output_file = os.path.join(output_path, name.replace('.wav', '.png'))
         create_specs(input_file, output_file)
 
-#child_dirs = os.listdir(SOURCE_DATA)
 import keras
 import tensorflow as tf
 
@@ -74,7 +75,6 @@ for dir in specs_dir:
     output = os.path.join(GENERATED_DATA,dir)
     save_specs(input,output)
 '''
-
 def extract(path):
     feature = []
     label = []
@@ -115,6 +115,7 @@ y_train = []
 y_test = []
 
 from sklearn.model_selection import KFold
+from sklearn.model_selection import StratifiedKFold
 from tensorflow.keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
 
@@ -123,6 +124,8 @@ load_dir = "Spectrograms/"
 accuracies = []
 losses = []
 kf = KFold(n_splits=10)
+#skf = StratifiedKFold(n_splits=10)
+count = 0
 for train_index, test_index in kf.split(folds): #Splits into training and testing sets
     x_train, y_train = [], []
     for ind in train_index:
@@ -146,13 +149,14 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
 
     model.compile(optimizer='rmsprop', loss='categorical_crossentropy',metrics=['accuracy'])
 
-    model.fit(x_train_norm,y_train_encoded,validation_data=(x_test_norm, y_test_encoded),batch_size=10,epochs=5) #e=10
+    model.fit(x_train_norm,y_train_encoded,validation_data=(x_test_norm, y_test_encoded),batch_size=10,epochs=8) #e=10
 
     #determine which layer to slice at for freeze/unfreeze
-    '''
+
+    ###
     for i, layer in enumerate(model.layers):
        print(i, layer.name)
-    '''
+    ###
 
     for layer in model.layers[:67]:
        layer.trainable = False
@@ -163,7 +167,7 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     # we need to recompile the model for these modifications to take effect
     model.compile(optimizer=Adam(lr=1e-5), loss='categorical_crossentropy',metrics=['accuracy'])
     #model.summary()
-    history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=15,epochs=50) #e=10
+    history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=15,epochs=25) #e=10
 
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
@@ -171,7 +175,8 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     plt.ylabel('accuracy')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.show()
+    plt.savefig("Accuracy_Graph_"+str(count)+"_.png")
+    plt.close()
 
     # summarize history for loss
     plt.plot(history.history['loss'])
@@ -180,11 +185,11 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     plt.ylabel('loss')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.show()
+    plt.savefig("Loss_Graph_"+str(count)+"_.png")
+    plt.close()
 
-    #count = 0
-    #model.save("Model" + str(count) + ".h5")
-    #count += 1
+
+    model.save("Model" + str(count) + ".h5")
 
     l, a = model.evaluate(x_test_norm,y_test_encoded,verbose = 0)
     accuracies.append(a)
@@ -202,8 +207,9 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.show()
-    #plt.savefig("Confusion_Matrix_CNN")
+    plt.savefig("Confusion_Matrix_CNN"+str(count)+".png")
+    plt.close()
+    count += 1
 
     print("Displaying Classification Report")
     classes = ["0-Voices","1-Locomotion","2-Digestive","3-Elements","4-Animals","5-Cook_App","6-Clean-App","7-Vent_App","8-Furniture","9-Instruments"]
@@ -220,4 +226,5 @@ plt.xlabel("Fold No")
 plt.ylabel("Accuracy")
 plt.title("Accuracy of Each Fold")
 plt.show()
+plt.close()
 #plt.savefig(os.path.join(MODEL_GRAPHS,"Dataset_All_Folds_Accuracy" + ".png"))

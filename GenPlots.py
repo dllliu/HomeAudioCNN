@@ -59,26 +59,22 @@ def visualize_spec(param):
     #plt.show()
     
 def gen_mel_spec(param):
-    y,sr = librosa.load(param)
-    S = librosa.feature.melspectrogram(y=y,
-                                   sr=sr,
-                                   n_mels=128 * 2,)
-    S_db_mel = librosa.amplitude_to_db(S, ref=np.max)
-    fig, ax = plt.subplots(figsize=(10, 5))
-    # Plot the mel spectogram
-    img = librosa.display.specshow(S_db_mel,
-                          x_axis='time',
-                          y_axis='log',
-                          ax=ax)
-    ax.set_title('Mel Spectogram:' + param, fontsize=8)
-    fig.colorbar(img, ax=ax, format=f'%0.2f')
+    hop_length = 512
+    n_fft = 2048
+    n_mels = 128
+    y, sr = librosa.load(param)
+    S = librosa.feature.melspectrogram(y, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
+    S_DB = librosa.power_to_db(S, ref=np.max)
+    librosa.display.specshow(S_DB, sr=sr, hop_length=hop_length, x_axis='time', y_axis='mel')
+    plt.colorbar(format='%+2.0f dB')
     plt.savefig(os.path.join(MODEL_GRAPHS,'Log_Mel_Spectrogram' + str(param.split("\\")[2])+ ".png"))
-    #plt.show()
 
 def main():
     for sound in random_sounds:
          visualize(sound)  
-         visualize_spec(sound)
-         gen_mel_spec(sound)  
+    for sound in random_sounds:
+        visualize_spec(sound)
+    for sound in random_sounds:
+        gen_mel_spec(sound)
 
 if __name__ == '__main__': main()
