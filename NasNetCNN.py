@@ -9,7 +9,7 @@ from keras.layers import Flatten, Dense, Dropout
 from tensorflow.keras import Model
 from tensorflow.keras.layers import BatchNormalization
 import seaborn as sns
-import CNN
+import MobileNetCNN
 import numpy as np
 import matplotlib.plyplot as plt
 
@@ -49,11 +49,11 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     x_train, y_train = [], []
     for ind in train_index:
         param = os.path.join(load_dir,'fold'+str(ind),"*png")
-        features,labels = CNN.extract(param)
+        features,labels = MobileNetCNN.extract(param)
         x_train += features
         y_train += labels
     test_param = os.path.join(load_dir,'fold'+str(test_index[0]),"*png")
-    test_features, test_labels = CNN.extract(test_param)
+    test_features, test_labels = MobileNetCNN.extract(test_param)
     x_test += test_features
     y_test += test_labels
 
@@ -151,6 +151,7 @@ print(val_lo)
 print("Average 10 Folds Accuracy:" + str((np.mean(accuracies))))
 fig = plt.figure(figsize = (10, 5))
 
+all_folds = ["fold0","fold1","fold2","fold3","fold4","fold5","fold6","fold7","fold8","fold9"]
 # creating the bar plot
 plt.bar(all_folds, accuracies, color ='maroon',
         width = 0.4)

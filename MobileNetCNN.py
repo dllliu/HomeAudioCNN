@@ -188,6 +188,7 @@ print(val_lo)
 print("Average 10 Folds Accuracy:" + str((np.mean(accuracies))))
 fig = plt.figure(figsize = (10, 5))
 
+all_folds = ["fold0","fold1","fold2","fold3","fold4","fold5","fold6","fold7","fold8","fold9"]
 # creating the bar plot
 plt.bar(all_folds, accuracies, color ='maroon',
         width = 0.4)

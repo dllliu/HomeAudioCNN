@@ -1,0 +1,181 @@
+Displaying Classification Report
+               precision    recall  f1-score   support
+
+     0-Voices       0.69      0.73      0.71        15
+ 1-Locomotion       0.79      0.79      0.79        14
+  2-Digestive       0.38      0.38      0.38        13
+   3-Elements       0.74      0.82      0.78        17
+    4-Animals       0.67      0.53      0.59        15
+   5-Cook_App       0.60      0.43      0.50        14
+  6-Clean-App       0.47      0.56      0.51        16
+   7-Vent_App       0.62      0.67      0.65        15
+  8-Furniture       0.31      0.36      0.33        14
+9-Instruments       1.00      0.85      0.92        13
+
+     accuracy                           0.62       146
+    macro avg       0.63      0.61      0.62       146
+ weighted avg       0.63      0.62      0.62       146
+
+
+Displaying Classification Report
+               precision    recall  f1-score   support
+
+     0-Voices       0.60      0.80      0.69        15
+ 1-Locomotion       0.70      0.50      0.58        14
+  2-Digestive       0.50      0.57      0.53        14
+   3-Elements       0.85      0.69      0.76        16
+    4-Animals       0.56      0.36      0.43        14
+   5-Cook_App       0.40      0.57      0.47        14
+  6-Clean-App       0.38      0.38      0.38        16
+   7-Vent_App       0.53      0.50      0.52        16
+  8-Furniture       0.57      0.53      0.55        15
+9-Instruments       0.86      0.92      0.89        13
+
+     accuracy                           0.58       147
+    macro avg       0.59      0.58      0.58       147
+ weighted avg       0.59      0.58      0.58       147
+
+Displaying Classification Report
+               precision    recall  f1-score   support
+
+     0-Voices       0.75      0.80      0.77        15
+ 1-Locomotion       0.64      0.69      0.67        13
+  2-Digestive       0.45      0.64      0.53        14
+   3-Elements       0.55      0.69      0.61        16
+    4-Animals       0.78      0.50      0.61        14
+   5-Cook_App       0.42      0.36      0.38        14
+  6-Clean-App       0.62      0.53      0.57        15
+   7-Vent_App       0.71      0.75      0.73        16
+  8-Furniture       0.67      0.40      0.50        15
+9-Instruments       0.80      0.92      0.86        13
+
+     accuracy                           0.63       145
+    macro avg       0.64      0.63      0.62       145
+ weighted avg       0.64      0.63      0.62       145
+
+Displaying Classification Report
+               precision    recall  f1-score   support
+
+     0-Voices       0.76      0.87      0.81        15
+ 1-Locomotion       0.82      0.69      0.75        13
+  2-Digestive       0.50      0.29      0.36        14
+   3-Elements       0.75      0.75      0.75        16
+    4-Animals       0.45      0.64      0.53        14
+   5-Cook_App       0.50      0.64      0.56        14
+  6-Clean-App       1.00      0.40      0.57        15
+   7-Vent_App       0.72      0.81      0.76        16
+  8-Furniture       0.56      0.67      0.61        15
+9-Instruments       0.85      0.85      0.85        13
+
+     accuracy                           0.66       145
+    macro avg       0.69      0.66      0.66       145
+ weighted avg       0.69      0.66      0.66       145
+
+  precision    recall  f1-score   support
+
+     0-Voices       0.55      0.73      0.63        15
+ 1-Locomotion       0.75      0.69      0.72        13
+  2-Digestive       0.80      0.29      0.42        14
+   3-Elements       0.73      0.69      0.71        16
+    4-Animals       0.57      0.57      0.57        14
+   5-Cook_App       0.44      0.50      0.47        14
+  6-Clean-App       0.56      0.60      0.58        15
+   7-Vent_App       0.61      0.69      0.65        16
+  8-Furniture       0.58      0.73      0.65        15
+9-Instruments       0.90      0.69      0.78        13
+
+     accuracy                           0.62       145
+    macro avg       0.65      0.62      0.62       145
+ weighted avg       0.65      0.62      0.62       145
+
+Displaying Classification Report
+               precision    recall  f1-score   support
+
+     0-Voices       0.58      0.73      0.65        15
+ 1-Locomotion       0.92      0.85      0.88        13
+  2-Digestive       0.82      0.64      0.72        14
+   3-Elements       0.78      0.88      0.82        16
+    4-Animals       0.67      0.57      0.62        14
+   5-Cook_App       0.75      0.64      0.69        14
+  6-Clean-App       0.58      0.47      0.52        15
+   7-Vent_App       0.58      0.69      0.63        16
+  8-Furniture       0.53      0.53      0.53        15
+9-Instruments       0.80      0.92      0.86        13
+
+     accuracy                           0.69       145
+    macro avg       0.70      0.69      0.69       145
+ weighted avg       0.69      0.69      0.69       145
+
+ precision    recall  f1-score   support
+
+     0-Voices       0.60      0.80      0.69        15
+ 1-Locomotion       0.78      0.54      0.64        13
+  2-Digestive       0.63      0.86      0.73        14
+   3-Elements       0.81      0.81      0.81        16
+    4-Animals       0.62      0.36      0.45        14
+   5-Cook_App       0.60      0.21      0.32        14
+  6-Clean-App       0.37      0.47      0.41        15
+   7-Vent_App       0.59      0.62      0.61        16
+  8-Furniture       0.47      0.53      0.50        15
+9-Instruments       0.80      0.92      0.86        13
+
+     accuracy                           0.61       145
+    macro avg       0.63      0.61      0.60       145
+ weighted avg       0.62      0.61      0.60       145
+
+Displaying Classification Report
+               precision    recall  f1-score   support
+
+     0-Voices       0.62      0.53      0.57        15
+ 1-Locomotion       0.60      0.69      0.64        13
+  2-Digestive       0.33      0.36      0.34        14
+   3-Elements       0.67      0.75      0.71        16
+    4-Animals       0.50      0.50      0.50        14
+   5-Cook_App       0.43      0.43      0.43        14
+  6-Clean-App       0.33      0.33      0.33        15
+   7-Vent_App       0.50      0.56      0.53        16
+  8-Furniture       0.56      0.33      0.42        15
+9-Instruments       0.86      0.92      0.89        13
+
+     accuracy                           0.54       145
+    macro avg       0.54      0.54      0.54       145
+ weighted avg       0.54      0.54      0.53       145
+
+Displaying Classification Report
+               precision    recall  f1-score   support
+
+     0-Voices       0.62      0.67      0.65        15
+ 1-Locomotion       0.71      0.77      0.74        13
+  2-Digestive       0.45      0.69      0.55        13
+   3-Elements       0.91      0.62      0.74        16
+    4-Animals       0.60      0.43      0.50        14
+   5-Cook_App       0.69      0.64      0.67        14
+  6-Clean-App       0.60      0.40      0.48        15
+   7-Vent_App       0.50      0.80      0.62        15
+  8-Furniture       0.55      0.40      0.46        15
+9-Instruments       0.86      0.92      0.89        13
+
+     accuracy                           0.63       143
+    macro avg       0.65      0.63      0.63       143
+ weighted avg       0.65      0.63      0.63       143
+
+Displaying Classification Report
+               precision    recall  f1-score   support
+
+     0-Voices       0.86      0.75      0.80        16
+ 1-Locomotion       0.80      0.62      0.70        13
+  2-Digestive       0.50      0.36      0.42        14
+   3-Elements       0.57      0.81      0.67        16
+    4-Animals       0.57      0.57      0.57        14
+   5-Cook_App       0.76      1.00      0.87        13
+  6-Clean-App       0.45      0.33      0.38        15
+   7-Vent_App       0.53      0.56      0.55        16
+  8-Furniture       0.60      0.60      0.60        15
+9-Instruments       0.80      0.86      0.83        14
+
+     accuracy                           0.64       146
+    macro avg       0.64      0.65      0.64       146
+ weighted avg       0.64      0.64      0.63       146
+
+Average 10 Folds Accuracy:0.6219599902629852
+
