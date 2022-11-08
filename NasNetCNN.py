@@ -38,6 +38,10 @@ folds = np.array(['fold0','fold1','fold2','fold3','fold4','fold5','fold6','fold7
 load_dir = "Spectrograms/"
 accuracies = []
 losses = []
+acc = []
+val_acc = []
+lo = []
+val_lo = []
 kf = KFold(n_splits=10)
 #skf = StratifiedKFold(n_splits=10)
 count = 0
@@ -83,7 +87,7 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     model.compile(optimizer=Adam(lr=1e-5), loss='categorical_crossentropy',metrics=['accuracy'])
     #model.summary()
     history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=10,epochs=15)
-
+    '''
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
     plt.title('model accuracy')
@@ -102,7 +106,12 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     plt.legend(['train', 'test'], loc='upper left')
     plt.savefig("Loss_Graph_"+str(count)+"_.png")
     plt.close()
-
+    '''
+    acc.append(history.history['accuracy'])
+    val_acc.append(history.history['val_accuracy'])
+    lo.append(history.history['loss'])
+    val_lo.append(history.history['val_loss'])
+    
 
     #model.save("Model" + str(count) + ".h5")
 
@@ -133,6 +142,11 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     x_test.clear()
     y_train.clear()
     y_test.clear()
+    
+print(acc)
+print(val_acc)
+print(lo)
+print(val_lo)
 
 print("Average 10 Folds Accuracy:" + str((np.mean(accuracies))))
 fig = plt.figure(figsize = (10, 5))

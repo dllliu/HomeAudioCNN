@@ -1,63 +1,17 @@
 import numpy as np
-import librosa.display, os
+import os
 import matplotlib.pyplot as plt
-import librosa
 import os
 from glob import glob
 import numpy as np
 import pandas as pd
 
-SOURCE_DATA='Folded-AudioData/'
-GENERATED_DATA='Spectrograms/'
-
-file_ext = '*.wav'
-
-child_dirs = os.listdir(SOURCE_DATA)
-
-itr = iter(child_dirs)
-fold1 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold2 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold3 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold4 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold5 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold6 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold7 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold8 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold9 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-fold10 = glob(os.path.join(SOURCE_DATA,next(itr),file_ext))
-
-class_names = [fold1,fold2,fold3,fold4,fold5,fold6,fold7,fold8,fold9,fold10]
-all_folds = ["fold0","fold1","fold2","fold3","fold4","fold5","fold6","fold7","fold8","fold9"]
-def make_file_structure():
-    for fold in all_folds:
-        OutFolder = os.path.join(GENERATED_DATA,fold)
-        if not os.path.exists(OutFolder):
-            os.makedirs(OutFolder)
-
-def create_specs(audio_file, image_file):
-    hop_length = 512
-    n_fft = 2048
-    n_mels = 128
-    y, sr = librosa.load(audio_file)
-    S = librosa.feature.melspectrogram(y, sr=sr, n_fft=n_fft, hop_length=hop_length, n_mels=n_mels)
-    S_DB = librosa.power_to_db(S, ref=np.max)
-    librosa.display.specshow(S_DB, sr=sr, hop_length=hop_length)
-    #plt.colorbar(format='%+2.0f dB')
-    plt.axis('off')
-    #plt.show()
-    plt.savefig(image_file,bbox_inches='tight', pad_inches=0)
-    plt.close()
-
-def save_specs(input_path, output_path):
-    for fn in glob(os.path.join(input_path,file_ext)):
-        start = fn.find("\\") + 1
-        name = fn[start:]
-        input_file = os.path.join(input_path, name)
-        output_file = os.path.join(output_path, name.replace('.wav', '.png'))
-        create_specs(input_file, output_file)
-
 import keras
 import tensorflow as tf
+
+SOURCE_DATA='Folded-AudioData/'
+GENERATED_DATA='Spectrograms/'
+file_ext = '*.wav'
 
 def load_images(file):
     images = []
@@ -66,21 +20,12 @@ def load_images(file):
     images.append(array)
     return images
 
-'''
-make_file_structure()
-specs_dir = os.listdir(SOURCE_DATA)
-
-for dir in specs_dir:
-    input = os.path.join(SOURCE_DATA,dir)
-    output = os.path.join(GENERATED_DATA,dir)
-    save_specs(input,output)
-'''
 def extract(path):
     feature = []
     label = []
     for file in glob(path):
-        #print(file)
-        fn_label = file.split("-")[1]
+        arr = file.split("-")
+        fn_label = str(arr[1])[0]
         images = load_images(file)
         feature += images
         label += fn_label
@@ -124,6 +69,10 @@ folds = np.array(['fold0','fold1','fold2','fold3','fold4','fold5','fold6','fold7
 load_dir = "Spectrograms/"
 accuracies = []
 losses = []
+acc = []
+val_acc = []
+lo = []
+val_lo = []
 kf = KFold(n_splits=10)
 #skf = StratifiedKFold(n_splits=10)
 count = 0
@@ -150,7 +99,7 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
 
     model.compile(optimizer='rmsprop', loss='categorical_crossentropy',metrics=['accuracy'])
 
-    model.fit(x_train_norm,y_train_encoded,validation_data=(x_test_norm, y_test_encoded),batch_size=10,epochs=5)
+    model.fit(x_train_norm,y_train_encoded,validation_data=(x_test_norm, y_test_encoded),batch_size=10,epochs=5) 
 
     #determine which layer to slice at for freeze/unfreeze
 
@@ -168,28 +117,38 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     # we need to recompile the model for these modifications to take effect
     model.compile(optimizer=Adam(lr=1e-5), loss='categorical_crossentropy',metrics=['accuracy'])
     #model.summary()
-    history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=10,epochs=15)
-
+    history = model.fit(x_train_norm,y_train_encoded, validation_data= (x_test_norm, y_test_encoded), batch_size=10,epochs=15) #epochs = 15
+    
+    '''
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
     plt.title('model accuracy')
     plt.ylabel('accuracy')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.savefig("Accuracy_Graph_"+str(count)+"_.png")
-    plt.close()
+    plt.show()
+    '''
+    acc.append(history.history['accuracy'])
+    val_acc.append(history.history['val_accuracy'])
+    #plt.savefig("Accuracy_Graph_"+str(count)+"_.png")
+    #plt.close()
 
     # summarize history for loss
+    
+    '''
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
     plt.title('model loss')
     plt.ylabel('loss')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.savefig("Loss_Graph_"+str(count)+"_.png")
-    plt.close()
-
-
+    plt.show()
+    '''
+    lo.append(history.history['loss'])
+    val_lo.append(history.history['val_loss'])
+    #plt.savefig("Loss_Graph_"+str(count)+"_.png")
+    #plt.close()
+    
     #model.save("Model" + str(count) + ".h5")
 
     l, a = model.evaluate(x_test_norm,y_test_encoded,verbose = 0)
@@ -209,6 +168,7 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.savefig("Confusion_Matrix_CNN"+str(count)+".png")
+    #plt.show()
     plt.close()
     count += 1
 
@@ -219,6 +179,11 @@ for train_index, test_index in kf.split(folds): #Splits into training and testin
     x_test.clear()
     y_train.clear()
     y_test.clear()
+
+print(acc)
+print(val_acc)
+print(lo)
+print(val_lo)
 
 print("Average 10 Folds Accuracy:" + str((np.mean(accuracies))))
 fig = plt.figure(figsize = (10, 5))
