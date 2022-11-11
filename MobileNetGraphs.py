@@ -12,33 +12,37 @@ accuracies = [0.6164383292198181, 0.5782312750816345, 0.6275861859321594, 0.6620
 
 losses = [1.1030313968658447, 1.2976514101028442, 1.1283830404281616, 1.0318074226379395, 1.2050573825836182, 0.9933460354804993, 1.1068115234375, 1.2364863157272339, 1.15812349319458, 1.1190871000289917]
 
-#avg_acc = np.mean(accuracies)
-#avg_losses = np.mean(losses)
-std_acc = np.std(accuracies)
-std_losses = np.std(losses)
-print(std_acc)
-print(std_losses)
+mean_acc = np.mean(accuracies)
+mean_losses = np.mean(losses)
+print(mean_acc)
+print(mean_losses)
+'''
+a = np.array(accuracies)
+l = np.array(losses)
+std_a = 2 * np.std(a)
+std_l = 2 *np.std(l)
 all_folds = ["fold0","fold1","fold2","fold3","fold4","fold5","fold6","fold7","fold8","fold9"]
 # creating the bar plot
-plt.bar(all_folds, accuracies, yerr=std_acc,color ='blue',
-        width = 0.4)
+plt.bar(all_folds, accuracies,yerr = std_a, color ='blue',
+        width = 0.4,align='center', alpha=0.5, ecolor='black', capsize=10)
 
 plt.xlabel("Fold Number")
 plt.ylabel("Accuracy")
 plt.title("Accuracy of Each Fold For MobileNet CNN")
-plt.show()
+plt.savefig("AMobileNet.png")
 plt.close()
 
-plt.bar(all_folds, losses, yerr=std_losses,color ='maroon',
-        width = 0.4)
+plt.bar(all_folds, losses,yerr = std_l, color ='maroon',
+        width = 0.4,align='center', alpha=0.5, ecolor='black', capsize=10)
 
 plt.xlabel("Fold Number")
 plt.ylabel("Loss")
 plt.title("Loss of Each Fold For MobileNet CNN")
-plt.show()
+plt.savefig("LMobileNet.png")
 plt.close()
 
-'''
+
+
 epochs = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
 plt.title('Model Accuracy For MobileNet')

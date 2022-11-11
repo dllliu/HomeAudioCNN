@@ -10,29 +10,36 @@ val_loss = [[1.9158968925476074, 1.5608054399490356, 1.421839714050293, 1.339538
 
 accuracies = [0.6095890402793884, 0.6190476417541504, 0.6206896305084229, 0.6758620738983154, 0.6275861859321594, 0.6068965792655945, 0.6275861859321594, 0.5862069129943848, 0.6083915829658508, 0.664383590221405]
 losses = [1.0994912385940552, 1.282256007194519, 1.0845530033111572, 1.0391649007797241, 1.217873454093933, 1.053863286972046, 1.1818289756774902, 1.2370439767837524, 1.097583293914795, 1.0387109518051147]
-std_acc = np.std(accuracies)
-std_losses = np.std(losses)
+
+mean_acc = np.mean(accuracies)
+mean_losses = np.mean(losses)
+print(mean_acc)
+print(mean_losses)
+'''
+std_acc = 2 * np.std(accuracies)
+std_losses = 2 * np.std(losses)
 print(std_acc)
 print(std_losses)
 all_folds = ["fold0","fold1","fold2","fold3","fold4","fold5","fold6","fold7","fold8","fold9"]
 # creating the bar plot
 plt.bar(all_folds, accuracies, yerr=std_acc,color ='green',
-        width = 0.4)
+        width = 0.4,align='center', alpha=0.5, ecolor='black', capsize=10)
 
 plt.xlabel("Fold Number")
 plt.ylabel("Accuracy")
 plt.title("Accuracy of Each Fold For RESNet50 CNN")
-plt.show()
+plt.savefig("ARes.png")
 plt.close()
-'''
+
 plt.bar(all_folds, losses, yerr=std_losses,color ='maroon',
-        width = 0.4)
+        width = 0.4,align='center', alpha=0.5, ecolor='black', capsize=10)
 
 plt.xlabel("Fold Number")
 plt.ylabel("Loss")
 plt.title("Loss of Each Fold For RESNet50 CNN")
-plt.show()
+plt.savefig("LRes.png")
 plt.close()
+
 
 epochs = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 

@@ -11,28 +11,33 @@ val_loss = [[1.9636462926864624, 1.593693733215332, 1.4306893348693848, 1.352299
 accuracies = [0.6232876777648926, 0.5986394286155701, 0.6068965792655945, 0.6965517401695251, 0.5724138021469116, 0.6758620738983154, 0.5724138021469116, 0.5862069129943848, 0.6153846383094788, 0.6780821681022644]
 
 losses = [1.095535159111023, 1.3225388526916504, 1.151173710823059, 0.993991494178772, 1.2790114879608154, 0.9642466306686401, 1.1880513429641724, 1.1763842105865479, 1.196566104888916, 1.0672625303268433]
-std_acc = np.std(accuracies)
-std_losses = np.std(losses)
+mean_acc = np.mean(accuracies)
+mean_losses = np.mean(losses)
+print(mean_acc)
+print(mean_losses)
+'''
+std_acc = 2 * np.std(accuracies)
+std_losses = 2 * np.std(losses)
 print(std_acc)
 print(std_losses)
 all_folds = ["fold0","fold1","fold2","fold3","fold4","fold5","fold6","fold7","fold8","fold9"]
 # creating the bar plot
 plt.bar(all_folds, accuracies, yerr=std_acc,color ='red',
-        width = 0.4)
+        width = 0.4,align='center', alpha=0.5, ecolor='black', capsize=10)
 
 plt.xlabel("Fold Number")
 plt.ylabel("Accuracy")
 plt.title("Accuracy of Each Fold For NASNetMobile CNN")
-plt.show()
+plt.savefig("ANAS.png")
 plt.close()
-'''
+
 plt.bar(all_folds, losses, yerr=std_losses,color ='maroon',
-        width = 0.4)
+        width = 0.4,align='center', alpha=0.5, ecolor='black', capsize=10)
 
 plt.xlabel("Fold Number")
 plt.ylabel("Loss")
 plt.title("Loss of Each Fold For NASNetMobile CNN")
-plt.show()
+plt.savefig("LNAS.png")
 plt.close()
 
 epochs = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
